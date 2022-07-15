@@ -37,12 +37,32 @@ namespace referral_data {
     response.status(200).end()
   }
 
-  export async function calculate_and_accrue_points(request: Request, response: Response) {
-    const { purchase_uuid } = request.body
+  async function update_reward_balance(referral_id: string) {
     let query: QueryResult<any>
 
-    if (typeof purchase_uuid !== "string") {
-      return response.status(400).send("purchase_uuid is needed")
+    query = await utils.fetch.user_data("referral_id", referral_id, "uuid")
+    const link_owner_user_uuid = query.rows[0].uuid
+
+    query = await utils.fetch.purchase_data(
+      "link_owner_user_uuid", link_owner_user_uuid, "earned_points")
+    const earned_points_list = query.rows
+
+    let total_points = 0
+    for (const points of earned_points_list) {
+      total_points += points.earned_points
+    }
+
+    await utils.update.user_data(
+      "uuid", link_owner_user_uuid, "reward_balance", total_points)
+  }
+
+  export async function calculate_and_accrue_points(request: Request, response: Response) {
+    const { purchase_uuid, referral_id } = request.body
+    let query: QueryResult<any>
+
+    if (typeof purchase_uuid !== "string" ||
+      typeof referral_id !== "string") {
+      return response.status(400).send("purchase_uuid and referral_id is needed")
     }
 
     try {
@@ -56,6 +76,8 @@ namespace referral_data {
       const points = Math.round(product_price * percent * 100) / 100
 
       await utils.update.purchase_data("uuid", purchase_uuid, "earned_points", points)
+
+      update_reward_balance(referral_id)
     }
     catch (error) {
       response.status(500).end()
