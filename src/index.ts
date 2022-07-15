@@ -17,6 +17,8 @@ app.get("/user-referral-id/:username", user_data.get_referral_id_by_username)
 
 app.get("/user-reward-balance/:username", user_data.get_reward_balance_by_username)
 
+app.get("/user-referral-info/:username", user_data.get_referral_info)
+
 app.listen(SERVER_PORT, () => {
   console.log(`Server started on port ${SERVER_PORT}`)
 })
