@@ -1,8 +1,8 @@
 import { Request } from "express"
 import { Response } from "express-serve-static-core/index"
-import { Pool } from "pg"
+import { Pool, QueryResult } from "pg"
 
-export { Request, Response }
+export { QueryResult, Request, Response }
 
 const pool = new Pool()
 
@@ -30,5 +30,18 @@ async function fetch_data(table: string, search_key: string, search_value: strin
 export namespace fetch {
   export async function user_data(search_key: string, search_value: any, return_key: string) {
     return fetch_data("users", search_key, search_value, return_key)
+  }
+
+  export async function purchase_data(search_key: string, search_value: any, return_key: string) {
+    return fetch_data("purchases", search_key, search_value, return_key)
+  }
+}
+
+async function update_data(table: string,
+  export async function purchase_data(
+    search_key: string, search_value: any,
+    update_key: string, update_value: any) {
+    return update_data("purchases",
+      search_key, search_value, update_key, update_value)
   }
 }
