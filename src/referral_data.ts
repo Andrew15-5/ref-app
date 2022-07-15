@@ -36,6 +36,34 @@ namespace referral_data {
     }
     response.status(200).end()
   }
+
+  export async function calculate_and_accrue_points(request: Request, response: Response) {
+    const { purchase_uuid } = request.body
+    let query: QueryResult<any>
+
+    if (typeof purchase_uuid !== "string") {
+      return response.status(400).send("purchase_uuid is needed")
+    }
+
+    try {
+      query = await utils.fetch.purchase_data("uuid", purchase_uuid, "product_uuid")
+      const product_uuid = query.rows[0].product_uuid
+
+      query = await utils.fetch.product_data("uuid", product_uuid, "price")
+      const product_price = query.rows[0].price
+
+      const percent = 0.1
+      const points = Math.round(product_price * percent * 100) / 100
+
+      await utils.update.purchase_data("uuid", purchase_uuid, "earned_points", points)
+    }
+    catch (error) {
+      response.status(500).end()
+      throw error
+    }
+
+    response.status(200).end()
+  }
 }
 
 export default referral_data

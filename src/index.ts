@@ -11,6 +11,8 @@ const SERVER_PORT = process.env.SERVER_PORT as string
 
 app.use(express.urlencoded({ extended: true }))
 
+app.post("/calculate-and-accrue-points", referral_data.calculate_and_accrue_points)
+
 app.post("/link-owner-user-uuid", referral_data.set_link_owner_uuid_by_referral_id)
 
 app.get("/user-referral-id/:username", user_data.get_referral_id_by_username)

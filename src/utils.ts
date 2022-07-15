@@ -32,12 +32,33 @@ export namespace fetch {
     return fetch_data("users", search_key, search_value, return_key)
   }
 
+  export async function product_data(search_key: string, search_value: any, return_key: string) {
+    return fetch_data("products", search_key, search_value, return_key)
+  }
+
   export async function purchase_data(search_key: string, search_value: any, return_key: string) {
     return fetch_data("purchases", search_key, search_value, return_key)
   }
 }
 
 async function update_data(table: string,
+  search_key: string, search_value: any,
+  update_key: string, update_value: any) {
+  const query_response = await pool.query(
+    `UPDATE ${table} \
+     SET ${update_key} = $1 \
+     WHERE ${search_key} = $2;`, [update_value, search_value])
+  return query_response
+}
+
+export namespace update {
+  export async function user_data(
+    search_key: string, search_value: any,
+    update_key: string, update_value: any) {
+    return update_data("users",
+      search_key, search_value, update_key, update_value)
+  }
+
   export async function purchase_data(
     search_key: string, search_value: any,
     update_key: string, update_value: any) {
