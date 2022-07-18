@@ -74,7 +74,7 @@ namespace referral_data {
 
     try {
       const error = await update_link_owner_uuid(purchase_uuid, referral_id)
-      if (error) response.status(error.status).send(error.message)
+      if (error) return response.status(error.status).send(error.message)
 
       await calculate_and_accrue_points(purchase_uuid, referral_id)
     }
