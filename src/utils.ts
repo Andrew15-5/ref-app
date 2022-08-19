@@ -26,6 +26,14 @@ namespace utils {
     if (error_occured) process.exit(1)
   }
 
+  export async function SIG_handler(signal: string) {
+    console.log("Got", signal, "signal")
+    console.log("Disconnecting from database")
+    await pool.end()
+    console.log("Exiting")
+    process.exit()
+  }
+
   async function fetch_data(table: string, search_key: string, search_value: string, return_key: string) {
     const query_response = await pool.query(
       `SELECT ${return_key} FROM ${table} \

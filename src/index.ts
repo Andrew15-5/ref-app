@@ -5,6 +5,9 @@ import user_data from "./user_data"
 import referral_data from "./referral_data"
 import utils from "./utils"
 
+process.on("SIGINT", utils.SIG_handler)
+process.on("SIGTERM", utils.SIG_handler)
+
 utils.make_sure_all_env_vars_are_set()
 
 const app = express()
