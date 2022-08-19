@@ -9,6 +9,11 @@ const pool = new Pool()
 namespace utils {
   export function make_sure_all_env_vars_are_set() {
     const env_vars: string[] = [
+      "PGDATABASE",
+      "PGHOST",
+      "PGPASSWORD",
+      "PGPORT",
+      "PGUSER",
       "SERVER_PORT"
     ]
     let error_occured = false
