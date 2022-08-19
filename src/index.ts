@@ -2,7 +2,7 @@ import express from "express"
 
 import user_data from "./user_data"
 import referral_data from "./referral_data"
-import * as utils from "./utils"
+import utils from "./utils"
 
 utils.make_sure_all_env_vars_are_set()
 

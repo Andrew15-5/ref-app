@@ -1,4 +1,4 @@
-import * as utils from "./utils"
+import utils from "./utils"
 import { QueryResult, Request, Response } from "./utils"
 
 async function calculate_and_accrue_points(purchase_uuid: string, referral_id: string) {
